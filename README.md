@@ -1,2 +1,3 @@
 # cognito-groups
-demonstrate an approach for using group based permissions with AWS Cognito
+
+A sample project and documentation for a method of working with AWS Cognito groups
