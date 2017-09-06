@@ -13,6 +13,7 @@ class App extends Component {
 
     this.state = {
       userToken: null,
+      accessToken: null,
       refreshToken: null,
       isLoadingUserToken: true,
     };
@@ -24,12 +25,19 @@ class App extends Component {
     });
   }
 
+  updateAccessToken = (accessToken) => {
+    this.setState({
+      accessToken: accessToken
+    });
+  }
+
   updateRefreshToken = (refreshToken) => {
     this.setState({
       refreshToken: refreshToken
     });
   }
 
+  // TODO:  need to factor out code that gets user token and keys so it can be called from multiple places.  needs to be called on login as well as componentDidMount
   async componentDidMount() {
       AWS.config.region = config.cognito.REGION;
 
@@ -44,8 +52,10 @@ class App extends Component {
     try {
       console.log("try to get tokens");
       const tokens = await getTokens(currentUser);
-      console.log(tokens);
+      console.log("id token:  " + tokens.idToken);
+      console.log("access token:  " + tokens.accessToken);
       this.updateUserToken(tokens.idToken);
+      this.updateAccessToken(tokens.accessToken);
       this.updateRefreshToken(tokens.refreshToken);
     }
     catch(e) {
@@ -74,6 +84,7 @@ class App extends Component {
       clearAwsCredentials();
     }
     this.updateUserToken(null);
+    this.updateAccessToken(null);
 
     this.props.history.push('/login');
   }
@@ -84,6 +95,7 @@ class App extends Component {
       refreshToken: this.state.refreshToken,
       jwtKeys: this.state.jwtKeys,
       updateUserToken: this.updateUserToken,
+      updateAccessToken: this.updateAccessToken,
       updateRefreshToken: this.updateRefreshToken,
     };
 
@@ -98,7 +110,7 @@ class App extends Component {
             <span className="icon-bar"></span>
             <span className="icon-bar"></span>
           </button>
-          <Link className="navbar-brand" to="/">Cognito Admin Test</Link>
+          <Link className="navbar-brand" to="/">Metrics Dashboard Admin</Link>
         </div>
 
         <div className="collapse navbar-collapse" id="navbar-collapse-1">

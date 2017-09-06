@@ -46,6 +46,10 @@ functions:
           authorizer: aws_iam
   adminOnlyFcn:
     handler: adminOnly.adminOnlyFcn
+    environment:
+      REGION: ${self:custom.aws_region}
+      USER_POOL_ID: ${self:custom.user_pool_id}
+      IDENTITY_POOL_ID: ${self:custom.identity_pool_id}      
     events:
       - http:
           path: adminOnly

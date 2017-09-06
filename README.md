@@ -34,7 +34,21 @@ The client was created using create-react-app (https://github.com/facebookincuba
 
 The Lambda function components were created using serverless (https://serverless.com).
 
-The Cognito User Pool should be created using defaults.  Create a user for test purposes.  Create a Group to represent admin membership.
+The Cognito User Pool should be created using defaults.  Create a user for test purposes.  Create a Group to represent admin membership.  Create a "custom attribute" called account_id, type string.  This will hold the userid of the user account we are admin over.
+
+Create an app client in the user pool.  And on that screen, set the read/write permissions on the custom attribute so it is read only.  it can be set from the command line:
+
+    -- create user
+    aws --profile <credentials profile name> cognito-idp sign-up --region us-east-1 --client-id <client app id> --username <username> --password <password>
+
+    -- verify user
+    aws --profile <credentials profile name> cognito-idp admin-confirm-sign-up --region us-east-1 --user-pool-id <user pool id> --username <username>
+
+    -- update value of custom attribute
+    aws --profile <credentials profile name> cognito-idp admin-update-user-attributes --region us-east-1 --user-pool-id <user pool id> --username <username> --user-attributes Name=custom:account_id,Value=123
+
+    -- show user information
+    aws --profile <credentials profile name> cognito-idp admin-get-user --region us-east-1 --user-pool-id <user pool id> --username <username>
 
 The Cognito Identiy Pool should be created using defaults.  It has a default unauthenticated role with a default inline policy:
 
@@ -173,7 +187,7 @@ and this trust relationship:
       ]
     }
 
-The second lambda function, adminOnlyFcn, exists for demo purposes to demonstrate calling it with elevated privliges.
+The second lambda function, adminOnlyFcn, exists for demo purposes to demonstrate calling it with elevated privliges.  The adminOnlyFcn also verifies the user's ID token and extracts the custom attribute account_id.
 
 A role is required for the elevated administrative user.  The ARN for this role will be used in the Lambda's serverless.yml config.  Look for "admin_group_name" within the environement section.  This is the role for which the getAwsRoleCred lambda function will provide credentials.
 

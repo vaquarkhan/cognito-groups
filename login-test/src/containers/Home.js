@@ -26,6 +26,7 @@ class Home extends Component {
         console.log(tokens.idToken);
         this.props.updateRefreshToken(tokens.refreshToken);
         this.props.updateUserToken(tokens.idToken);
+        this.props.updateAccessToken(tokens.accessToken);
         console.log("user token updated");
     }
 
@@ -67,7 +68,7 @@ class Home extends Component {
             var lambda = new AWS.Lambda();
             var params = {
                 "FunctionName": "getAwsRoleCred-dev-adminOnlyFcn",
-                "Payload": "{}",
+                "Payload": "{\"token\": \"" + this.props.userToken + "\"}",
             };
 
             var lambda_promise = lambda.invoke(params).promise();
@@ -116,8 +117,8 @@ class Home extends Component {
         const s3 = new AWS.S3();
 
         var params = {
-            Bucket: "XXXXX S3 Bucket Name",
-                Key: "XXXXX S3Path/viewer.txt",
+            Bucket: "rl-metrics-dashboard",
+                Key: "boards/viewer.txt",
         };
 
 
@@ -136,7 +137,7 @@ class Home extends Component {
             <div className="Home">
                 <div className="lander">
                     <h1>Home Page</h1>
-                    <p>Admin Test Page</p>
+                    <p>admin page for metrics dashboard</p>
                 </div>
                 <button onClick={this.showCredentials}>Show Cred</button>
                 <button onClick={this.refreshToken}>Refresh User Token</button>

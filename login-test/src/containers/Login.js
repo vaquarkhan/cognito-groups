@@ -36,6 +36,7 @@ class Login extends Component {
             console.log("usertoken from login");
             console.log(tokens.idToken);
             this.props.updateUserToken(tokens.idToken);
+            this.props.updateAccessToken(tokens.accessToken);
             this.props.updateRefreshToken(tokens.refreshToken);
             this.props.history.push('/');
         }
