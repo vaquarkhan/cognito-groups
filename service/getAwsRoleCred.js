@@ -1,7 +1,7 @@
 'use strict';
 
 /*
-  varify token
+  verify token
   look for 'cognito:groups' in the token payload
   lookup group in group => role mapping
     process.env['group name'] to get ARN
