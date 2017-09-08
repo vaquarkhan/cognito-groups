@@ -1,6 +1,6 @@
 # cognito-groups
 
-A sample JavaScript/NodeJS project and documentation for a method of working with AWS Cognito groups.  Overall this is pretty rough and being released so I can use it in a couple of proprietary projects without IP encumberance between them.
+A sample JavaScript/NodeJS project and documentation for a method of working with AWS Cognito groups to support multiple teirs of user access to a shared account.
 
 ## Motivation
 
@@ -257,6 +257,9 @@ This example does not demonstrate user signup.  The Login and Cognito work was a
 
 A lot more could be written about this however, as stated above, this is being done for personal reasons.  I may expand this in future.  Since this is in public, feel free to leave feedback and suggestions.
 
+## About
+
+Created by Michael Helmke/Linear Worlds
 
 ## License
 
