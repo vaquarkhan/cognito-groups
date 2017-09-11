@@ -95,6 +95,7 @@ class App extends Component {
     }
     this.updateUserToken(null);
     this.updateAccessToken(null);
+    this.updateRefreshToken(null);
     this.setIsAdminUser(false);
 
     this.props.history.push('/login');
