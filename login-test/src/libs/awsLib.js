@@ -93,3 +93,18 @@ export function clearAwsCredentials() {
     });
     AWS.config.credentials.clearCachedId();
 }
+
+export function testIsAdminUser(userToken, admin_group) {
+    if(null == userToken) {
+        return false;
+    }
+
+    const token = jwtDecode(userToken);
+    if('cognito:groups' in token) {
+        if(token['cognito:groups'][0] === admin_group) {
+            return true;
+        }
+    }
+
+    return false;
+}

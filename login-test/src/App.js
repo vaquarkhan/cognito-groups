@@ -3,7 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 import Routes from './Routes';
 import RouteNavItem from './components/RouteNavItem';
 import AWS from 'aws-sdk';
-import {clearAwsCredentials, getCurrentUser, getTokens} from './libs/awsLib';
+import {clearAwsCredentials, getCurrentUser, getTokens, testIsAdminUser} from './libs/awsLib';
 import config from './config.js';
 import './App.css';
 
@@ -15,6 +15,7 @@ class App extends Component {
       userToken: null,
       accessToken: null,
       refreshToken: null,
+      isAdminUser: false,
       isLoadingUserToken: true,
     };
   }
@@ -37,6 +38,13 @@ class App extends Component {
     });
   }
 
+  setIsAdminUser = (isAdminUser) => {
+    this.setState({
+      isAdminUser: isAdminUser
+    });
+  }
+
+
   // TODO:  need to factor out code that gets user token and keys so it can be called from multiple places.  needs to be called on login as well as componentDidMount
   async componentDidMount() {
       AWS.config.region = config.cognito.REGION;
@@ -57,6 +65,8 @@ class App extends Component {
       this.updateUserToken(tokens.idToken);
       this.updateAccessToken(tokens.accessToken);
       this.updateRefreshToken(tokens.refreshToken);
+      const isAdminUser = testIsAdminUser(tokens.idToken, config.admin.admin_group);
+      this.setIsAdminUser(isAdminUser);
     }
     catch(e) {
       if (e.code === "UserNotFoundException") {
@@ -85,6 +95,7 @@ class App extends Component {
     }
     this.updateUserToken(null);
     this.updateAccessToken(null);
+    this.setIsAdminUser(false);
 
     this.props.history.push('/login');
   }
@@ -93,10 +104,11 @@ class App extends Component {
     const childProps = {
       userToken: this.state.userToken,
       refreshToken: this.state.refreshToken,
-      jwtKeys: this.state.jwtKeys,
+      isAdminUser: this.state.isAdminUser,
       updateUserToken: this.updateUserToken,
       updateAccessToken: this.updateAccessToken,
       updateRefreshToken: this.updateRefreshToken,
+      setIsAdminUser: this.setIsAdminUser,
     };
 
     return ! this.state.isLoadingUserToken && (

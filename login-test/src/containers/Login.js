@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {CognitoUserPool, AuthenticationDetails, CognitoUser} from 'amazon-cognito-identity-js';
+import {testIsAdminUser} from '../libs/awsLib';
 import config from '../config.js';
 import LoaderButton from '../components/LoaderButton';
 
@@ -35,9 +36,13 @@ class Login extends Component {
             const tokens = await this.login(this.state.username, this.state.password);
             console.log("usertoken from login");
             console.log(tokens.idToken);
+            const isAdminUser = testIsAdminUser(tokens.idToken, config.admin.admin_group);
+            this.props.setIsAdminUser(isAdminUser);
             this.props.updateUserToken(tokens.idToken);
             this.props.updateAccessToken(tokens.accessToken);
             this.props.updateRefreshToken(tokens.refreshToken);
+
+            // NOTE:  may want to route differently here based on isAdminUser
             this.props.history.push('/');
         }
         catch(e) {
