@@ -87,9 +87,7 @@ class App extends Component {
   handleLogout = (event) => {
     const currentUser = getCurrentUser();
 
-    alert("about to signout");
     if(currentUser !== null) {
-      alert("signout");
       currentUser.signOut();
       clearAwsCredentials();
     }
