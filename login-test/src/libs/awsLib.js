@@ -1,5 +1,6 @@
 import AWS from 'aws-sdk';
 import {CognitoUserPool} from 'amazon-cognito-identity-js';
+import jwtDecode from 'jwt-decode';
 import config from '../config.js';
 
 export function getAwsCredentials(userToken) {
