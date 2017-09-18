@@ -144,7 +144,7 @@ The trust relationship for the Auth role is here.  Note "authenticated".
       ]
     }
 
-When the lambda functions are deployed, default inline policies are created:
+When the lambda functions are deployed by serverless, default inline policies are created:
 
     {
         "Version": "2012-10-17",
